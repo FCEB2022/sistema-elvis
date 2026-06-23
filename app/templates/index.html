@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASLYON_va SOLUCIONES | Maqueta navegable</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <span>🟢 +34 641 123 456</span>
+    <span>✉️ contacto@aslyonva.soluciones.com</span>
+    <span>Instagram · YouTube · LinkedIn</span>
+    <a href="/admin/login" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none;margin-left:auto;" title="Panel de Administración">🔐 Admin</a>
+  </div>
+  
+  <nav class="nav">
+    <div class="brand" onclick="go('inicio')">
+      <div class="logo">
+        <svg viewBox="0 0 64 64">
+          <path d="M32 3l23 9v19c0 15-10 24-23 30C19 55 9 46 9 31V12z" fill="#0b2452" stroke="#fff" stroke-width="3"/>
+          <path d="M22 41c8-1 19-7 20-17-5 4-12 3-15-2 8 0 14-5 15-13-14 3-22 15-22 32z" fill="#fff"/>
+          <path d="M29 22c6 3 10 8 11 17 4-7 6-17 2-25-1 7-5 11-13 8z" fill="#d7a928" opacity=".85"/>
+        </svg>
+      </div>
+      <div class="brand-title">
+        <strong>ASLYON_<span>va</span></strong>
+        <em>SOLUCIONES</em>
+        <small>Formación · Orientación · Crecimiento</small>
+      </div>
+    </div>
+    <div class="menu">
+      <a id="m-inicio" class="on" onclick="go('inicio')">Inicio</a>
+      <a id="m-academia" onclick="go('academia')">Academia Victoria</a>
+      <a id="m-mentoria" onclick="go('mentoria')">Mentoría</a>
+      <a id="m-ehackers" onclick="go('ehackers')">E_hackers</a>
+      <a id="m-nosotros" onclick="go('nosotros')">Sobre nosotros</a>
+      <a id="m-contacto" onclick="go('contacto')">Contacto</a>
+    </div>
+    <button class="nav-cta">Área de estudiantes</button>
+  </nav>
+
+  <main>
+    <!-- INICIO SECTION -->
+    <section id="inicio" class="page on">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="kicker">Portal integral</div>
+          <h1>Formación, orientación y acompañamiento para <span>crecer en España.</span></h1>
+          <p class="lead">ASLYON_va SOLUCIONES es un portal integral para estudiantes, profesionales e internacionales: clases en directo online, mentoría académica, formación en IA y creación de agentes inteligentes, con una imagen sólida, elegante y cercana.</p>
+          <div class="hero-actions">
+            <button class="btn gold" onclick="go('academia')">🎓 Academia Victoria</button>
+            <button class="btn blue" onclick="go('mentoria')">👥 Mentoría</button>
+            <button class="btn teal" onclick="go('ehackers')">🤖 E_hackers</button>
+          </div>
+          <div class="hero-feats">
+            <div class="mini"><i>🌍</i>Atención personalizada</div>
+            <div class="mini"><i>🏆</i>Experiencia en ingeniería</div>
+            <div class="mini"><i>💻</i>Clases online flexibles</div>
+            <div class="mini"><i>📈</i>Seguimiento individual</div>
+            <div class="mini"><i>🎧</i>Soporte continuo</div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="profile-card">
+            <img src="{{ url_for('static', filename='img/img_asset_1.png') }}" alt="Nueva imagen de perfil ASLYON_va SOLUCIONES">
+          </div>
+          <div class="stats-bubble">
+            <div class="avatars"><b>AV</b><b>ME</b><b>IA</b><b>ES</b><span>+500</span></div>
+            <strong>Estudiantes de más de 15 países ya confían en ASLYON_va SOLUCIONES.</strong>
+          </div>
+        </div>
+      </div>
+      
+      <section class="section alt">
+        <div class="title">
+          <small>Nuestros servicios</small>
+          <h2>Soluciones conectadas para tu desarrollo</h2>
+          <p>Tres áreas claras, visuales y complementarias para atraer estudiantes, profesionales e internacionales.</p>
+        </div>
+        <div class="cards">
+          <article class="service ac">
+            <div class="service-img">
+              <img src="{{ url_for('static', filename='img/img_asset_1.png') }}" alt="Academia Victoria">
+              <div class="badge ac">🎓</div>
+            </div>
+            <div class="service-body">
+              <h3>ACADEMIA VICTORIA</h3>
+              <p>Clases online especializadas para estudiantes de ingeniería y ciencias.</p>
+              <div class="checks">
+                <div class="check">Clases en directo online</div>
+                <div class="check">Preparación de exámenes</div>
+                <div class="check">Resolución de problemas</div>
+                <div class="check">Seguimiento semanal y tutorías personalizadas</div>
+              </div>
+              <button class="btn blue" onclick="go('academia')">Ver ventana</button>
+            </div>
+          </article>
+          
+          <article class="service me">
+            <div class="service-img">
+              <img src="{{ url_for('static', filename='img/img_asset_1.png') }}" alt="Mentoría">
+              <div class="badge me">👥</div>
+            </div>
+            <div class="service-body">
+              <h3>MENTORÍA</h3>
+              <p>Acompañamiento personal y profesional para avanzar con seguridad durante tu etapa académica.</p>
+              <div class="checks">
+                <div class="check">Orientación para trámites</div>
+                <div class="check">Adaptación cultural</div>
+                <div class="check">Mentoría durante tu carrera</div>
+                <div class="check">Seguimiento premium</div>
+              </div>
+              <button class="btn teal" onclick="go('mentoria')">Ver ventana</button>
+            </div>
+          </article>
+          
+          <article class="service ia">
+            <div class="service-img">
+              <img src="{{ url_for('static', filename='img/img_asset_1.png') }}" alt="E_hackers">
+              <div class="badge ia">🤖</div>
+            </div>
+            <div class="service-body">
+              <h3>E_HACKERS</h3>
+              <p>Formación en IA y desarrollo de soluciones inteligentes para tu futuro académico y profesional.</p>
+              <div class="checks">
+                <div class="check">Formación en el uso de la IA durante tu carrera</div>
+                <div class="check">Creación de agentes de IA</div>
+              </div>
+              <button class="btn purple" onclick="go('ehackers')">Ver ventana</button>
+            </div>
+          </article>
+        </div>
+      </section>
+      
+      <section class="section">
+        <div class="title">
+          <small>Diferenciales</small>
+          <h2>¿Por qué elegir ASLYON_va SOLUCIONES?</h2>
+        </div>
+        <div class="why">
+          <div class="why-item"><i>👥</i><h4>Atención personalizada</h4><p>Te acompañamos en cada paso del proceso.</p></div>
+          <div class="why-item"><i>🏆</i><h4>Experiencia en ingeniería</h4><p>Aprenderás de la mano de ingenieros con más de 5 años de experiencia en la industria y más de 4 años como profesores de apoyo.</p></div>
+          <div class="why-item"><i>💻</i><h4>Clases online flexibles</h4><p>Estudia desde donde estés, con horarios adaptados a tu disponibilidad.</p></div>
+          <div class="why-item"><i>📈</i><h4>Seguimiento individual</h4><p>Planes personalizados y acompañamiento constante de tu progreso.</p></div>
+          <div class="why-item"><i>🎧</i><h4>Soporte continuo</h4><p>Estamos disponibles para ayudarte cuando lo necesites.</p></div>
+        </div>
+      </section>
+      
+      <section class="section alt">
+        <div class="numbers">
+          <div class="num"><i>👨‍🎓</i><div><b>500+</b><span>Estudiantes asesorados</span></div></div>
+          <div class="num"><i>🌐</i><div><b>15+</b><span>Países representados</span></div></div>
+          <div class="num"><i>🎓</i><div><b>50+</b><span>Universidades colaboradoras</span></div></div>
+          <div class="num"><i>⭐</i><div><b>98%</b><span>Satisfacción de clientes</span></div></div>
+          <div>
+            <h3>¿Listo para comenzar?</h3>
+            <p>Da el primer paso hacia tus objetivos académicos y profesionales.</p>
+            <button class="btn gold" onclick="go('contacto')">Contáctanos ahora</button>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ACADEMIA SECTION -->
+    <section id="academia" class="page">
+      <div class="inner-hero">
+        <div>
+          <div class="kicker">Academia Victoria</div>
+          <h1>Clases en directo online para ingeniería y ciencias</h1>
+          <p>Una ventana especializada para estudiantes que necesitan mejorar su rendimiento académico con clases claras, ejercicios guiados y seguimiento semanal.</p>
+          <button class="btn gold" onclick="go('contacto')">Reservar clase gratuita</button>
+        </div>
+        <div class="mock">
+          <img src="{{ url_for('static', filename='img/img_asset_1.png') }}" alt="Academia Victoria mockup">
+        </div>
+      </div>
+      <section class="section">
+        <div class="grid2">
+          <div class="panel">
+            <h3>Servicios principales</h3>
+            <ul class="clean">
+              <li>Clases en directo online</li>
+              <li>Preparación de exámenes</li>
+              <li>Resolución de problemas</li>
+              <li>Seguimiento semanal y tutorías personalizadas</li>
+            </ul>
+          </div>
+          <div class="panel dark">
+            <h3>Especialidades iniciales</h3>
+            <ul class="clean">
+              <li>Física I</li>
+              <li>Física II</li>
+              <li>Termodinámica</li>
+              <li>Fundamentos de Electrónica</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- MENTORIA SECTION -->
+    <section id="mentoria" class="page">
+      <div class="inner-hero">
+        <div>
+          <div class="kicker">Mentoría</div>
+          <h1>Acompañamiento durante tu carrera y adaptación en España</h1>
+          <p>Mentoría diseñada para estudiantes e internacionales que necesitan orientación práctica, adaptación cultural y seguimiento premium durante su etapa académica.</p>
+          <button class="btn gold" onclick="go('contacto')">Agendar diagnóstico</button>
+        </div>
+        <div class="mock">
+          <img src="{{ url_for('static', filename='img/img_asset_1.png') }}" alt="Mentoría mockup">
+        </div>
+      </div>
+      <section class="section">
+        <div class="grid2">
+          <div class="panel">
+            <h3>Mentoría académica y personal</h3>
+            <ul class="clean">
+              <li>Orientación para trámites</li>
+              <li>Adaptación cultural</li>
+              <li>Mentoría durante tu carrera</li>
+              <li>Seguimiento premium</li>
+            </ul>
+          </div>
+          <div class="panel dark">
+            <h3>Planes sugeridos</h3>
+            <div class="pricing">
+              <div class="price">
+                <h3>Básica</h3>
+                <p>Una sesión mensual para organizar objetivos y resolver dudas clave.</p>
+              </div>
+              <div class="price premium">
+                <h3>Premium</h3>
+                <p>Seguimiento semanal, contacto continuo y acompañamiento personalizado.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- E_HACKERS SECTION -->
+    <section id="ehackers" class="page">
+      <div class="inner-hero">
+        <div>
+          <div class="kicker">E_hackers</div>
+          <h1>IA aplicada a tu carrera y a tu productividad</h1>
+          <p>Una sección moderna dedicada a formar a estudiantes y profesionales en el uso práctico de la inteligencia artificial, además de crear agentes IA personalizados.</p>
+          <button class="btn gold" onclick="go('contacto')">Solicitar consulta IA</button>
+        </div>
+        <div class="mock">
+          <img src="{{ url_for('static', filename='img/img_asset_1.png') }}" alt="E_hackers mockup">
+        </div>
+      </div>
+      <section class="section">
+        <div class="grid2">
+          <div class="panel">
+            <h3>Servicios E_hackers</h3>
+            <ul class="clean">
+              <li>Formación en el uso de la IA durante tu carrera</li>
+              <li>Creación de agentes de IA</li>
+              <li>Automatización de tareas académicas y profesionales</li>
+              <li>Orientación para usar herramientas IA con criterio y productividad</li>
+            </ul>
+          </div>
+          <div class="panel dark">
+            <h3>Propuesta de valor</h3>
+            <p>Aprende a utilizar la IA como una ventaja real durante tu carrera: estudiar mejor, organizar información, resolver tareas repetitivas y crear agentes inteligentes que trabajen contigo.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- SOBRE NOSOTROS SECTION -->
+    <section id="nosotros" class="page">
+      <div class="inner-hero">
+        <div>
+          <div class="kicker">Sobre nosotros</div>
+          <h1>Una marca cercana, técnica y orientada a resultados</h1>
+          <p>ASLYON_va SOLUCIONES combina formación académica, acompañamiento y tecnología para ayudar a estudiantes, profesionales e internacionales a formarse, establecerse y crecer en España.</p>
+        </div>
+        <div class="mock">
+          <img src="{{ url_for('static', filename='img/img_asset_1.png') }}" alt="Sobre ASLYON_va">
+        </div>
+      </div>
+      <section class="section">
+        <div class="grid2">
+          <div class="panel">
+            <h3>Nuestra esencia</h3>
+            <p>Trabajamos con un enfoque personalizado, flexible y profesional, adaptado a cada estudiante y a cada etapa de su camino académico o profesional.</p>
+          </div>
+          <div class="panel">
+            <h3>Experiencia en ingeniería</h3>
+            <p>Los estudiantes aprenderán de la mano de ingenieros con más de 5 años de experiencia en la industria y más de 4 años de experiencia como profesores de apoyo.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- CONTACTO SECTION -->
+    <section id="contacto" class="page">
+      <div class="inner-hero">
+        <div>
+          <div class="kicker">Contacto</div>
+          <h1>Tu futuro empieza hoy</h1>
+          <p>Reserva una clase, solicita mentoría o pide información sobre E_hackers. Te responderemos con una propuesta personalizada.</p>
+        </div>
+        <div class="mock">
+          <img src="{{ url_for('static', filename='img/img_asset_1.png') }}" alt="Contacto ASLYON_va">
+        </div>
+      </div>
+      <section class="section">
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3>WhatsApp</h3>
+            <p>+34 641 123 456<br>Respuesta rápida para dudas y reservas.</p>
+          </div>
+          <div class="contact-card">
+            <h3>Correo</h3>
+            <p>contacto@aslyonva.soluciones.com<br>Para consultas detalladas.</p>
+          </div>
+          <div class="contact-card">
+            <h3>Sesión gratuita</h3>
+            <p>Agenda una primera orientación sin compromiso.</p>
+          </div>
+        </div>
+        
+        <div class="panel" style="margin-top:28px">
+          <h3>Formulario web</h3>
+          <form id="contactForm" class="form">
+            <input type="text" id="nombre" placeholder="Nombre completo" required>
+            <input type="email" id="email" placeholder="Correo electrónico" required>
+            <select id="servicio" required>
+              <option value="">Servicio de interés</option>
+              <option value="Academia Victoria">Academia Victoria</option>
+              <option value="Mentoría">Mentoría</option>
+              <option value="E_hackers">E_hackers</option>
+            </select>
+            <input type="text" id="whatsapp" placeholder="WhatsApp">
+            <textarea id="mensaje" placeholder="Cuéntanos qué necesitas" required></textarea>
+            <button type="submit" class="btn gold full">Enviar consulta</button>
+          </form>
+          <div id="form-alert" style="display:none; margin-top:15px; padding:15px; border-radius:12px; font-weight:600; text-align:center;"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <h4>ASLYON_va SOLUCIONES</h4>
+      <p>Formación, orientación y acompañamiento para alcanzar tus objetivos académicos y profesionales.</p>
+    </div>
+    <div>
+      <h4>Servicios</h4>
+      <a onclick="go('academia')">Academia Victoria</a>
+      <a onclick="go('mentoria')">Mentoría</a>
+      <a onclick="go('ehackers')">E_hackers</a>
+    </div>
+    <div>
+      <h4>Contacto</h4>
+      <p>+34 641 123 456<br>contacto@aslyonva.soluciones.com</p>
+    </div>
+    <div>
+      <h4>Redes</h4>
+      <a>Instagram</a>
+      <a>YouTube</a>
+      <a>LinkedIn</a>
+    </div>
+  </footer>
+
+  <a class="whatsapp" href="#contacto" onclick="go('contacto')">💬 WhatsApp</a>
+</div>
+
+<!-- Modal for Student Portal Login -->
+<div id="studentModal" class="modal-overlay" onclick="if(event.target===this) closeStudentModal()">
+  <div class="modal-container">
+    <button class="modal-close" onclick="closeStudentModal()">&times;</button>
+    <h3 style="margin-top: 0; color: var(--navy2); font-size: 24px; font-weight: 900;">Área de Estudiantes</h3>
+    <p style="color: var(--muted); line-height: 1.6; font-size: 15px; margin-bottom: 24px;">Introduce tus credenciales para acceder a tus clases y grabaciones académicas.</p>
+
+    <div id="student-login-error" style="display:none; background:#fee2e2; color:#991b1b; border-radius:10px; padding:12px 16px; font-size:14px; font-weight:600; margin-bottom:16px;"></div>
+
+    <form id="studentLoginForm" onsubmit="handleStudentLogin(event)">
+      <div style="margin-bottom: 16px;">
+        <input type="email" id="student-email" placeholder="Correo electrónico" required
+               style="width: 100%; padding: 12px 14px; border: 1.5px solid #e5e9f0; border-radius: 10px; font-size: 15px; font-family: inherit; outline: none; transition: border-color .2s;"
+               onfocus="this.style.borderColor='#0b2452'" onblur="this.style.borderColor='#e5e9f0'">
+      </div>
+      <div style="margin-bottom: 24px;">
+        <input type="password" id="student-password" placeholder="Contraseña de acceso" required
+               style="width: 100%; padding: 12px 14px; border: 1.5px solid #e5e9f0; border-radius: 10px; font-size: 15px; font-family: inherit; outline: none; transition: border-color .2s;"
+               onfocus="this.style.borderColor='#0b2452'" onblur="this.style.borderColor='#e5e9f0'">
+      </div>
+      <button id="student-login-btn" class="btn gold full" type="submit">Iniciar Sesión</button>
+    </form>
+
+    <p style="text-align:center; margin-top:18px; font-size:13px; color: var(--muted);">
+      ¿No tienes acceso? <a href="https://wa.me/34641123456?text=Quiero%20acceder%20al%20%C3%A1rea%20de%20estudiantes" target="_blank" style="color:#0b7a8a;font-weight:700;">Contáctanos por WhatsApp</a>
+    </p>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Login | ASLYON_va SOLUCIONES</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #03112b;
+      --navy2: #071a42;
+      --gold: #d7a928;
+      --gold2: #f3c549;
+      --ink: #071633;
+      --muted: #9ca3af;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --border-color: rgba(215, 169, 40, 0.35);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: #fff;
+      background: radial-gradient(circle at 50% 50%, #0b2d66, #03112b);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .login-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 40px;
+      max-width: 420px;
+      width: 100%;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+    .logo-wrapper {
+      margin-bottom: 24px;
+      display: inline-grid;
+      place-items: center;
+      width: 70px;
+      height: 70px;
+      border: 2px solid var(--gold);
+      border-radius: 20px;
+      background: #071a42;
+    }
+    .logo-wrapper svg {
+      width: 48px;
+      height: 48px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 900;
+      margin: 0 0 8px;
+      letter-spacing: -0.5px;
+    }
+    h1 span {
+      color: var(--gold2);
+    }
+    p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0 0 30px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold2);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 15px;
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+      transition: all 0.2s ease-in-out;
+    }
+    input:focus {
+      border-color: var(--gold2);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 10px rgba(243, 197, 73, 0.25);
+    }
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 16px;
+      font-weight: 900;
+      font-size: 16px;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #071633;
+      transition: all 0.2s ease-in-out;
+      margin-top: 10px;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(215, 169, 40, 0.35);
+    }
+    .error-msg {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #f87171;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    .back-home {
+      display: inline-block;
+      margin-top: 24px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+    .back-home:hover {
+      color: var(--gold2);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo-wrapper">
+      <svg viewBox="0 0 64 64">
+        <path d="M32 3l23 9v19c0 15-10 24-23 30C19 55 9 46 9 31V12z" fill="#0b2452" stroke="#fff" stroke-width="3"/>
+        <path d="M22 41c8-1 19-7 20-17-5 4-12 3-15-2 8 0 14-5 15-13-14 3-22 15-22 32z" fill="#fff"/>
+        <path d="M29 22c6 3 10 8 11 17 4-7 6-17 2-25-1 7-5 11-13 8z" fill="#d7a928" opacity=".85"/>
+      </svg>
+    </div>
+    <h1>ASLYON_<span>va</span></h1>
+    <p>Portal de Administración de Consultas</p>
+
+    {% if error %}
+      <div class="error-msg">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+      <div class="form-group">
+        <label for="password">Contraseña del Portal</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required autofocus>
+      </div>
+      <button type="submit" class="btn">Acceder al Panel</button>
+    </form>
+    
+    <a href="{{ url_for('main.index') }}" class="back-home">← Volver al sitio principal</a>
+  </div>
+</body>
+</html>

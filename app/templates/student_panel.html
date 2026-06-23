@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel de Estudiante | ASLYON_va SOLUCIONES</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:  #0b2452;
+      --navy2: #102d62;
+      --gold:  #c89b30;
+      --gold2: #d7a928;
+      --teal:  #0b7a8a;
+      --bg:    #f4f6fb;
+      --card:  #ffffff;
+      --muted: #6b7280;
+      --border:#e5e9f0;
+      --radius: 16px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: #1e2d4e;
+      min-height: 100vh;
+    }
+
+    /* ── Top Bar ── */
+    .topbar {
+      background: var(--navy);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(11,36,82,.25);
+    }
+    .topbar .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -.3px;
+    }
+    .topbar .brand svg { width: 36px; height: 36px; }
+    .topbar .brand span { color: var(--gold2); }
+    .topbar .user-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+    }
+    .topbar .user-info .avatar {
+      width: 38px; height: 38px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 16px; color: var(--navy);
+    }
+    .btn-logout {
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 10px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,.22); }
+
+    /* ── Layout ── */
+    .layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* ── Welcome Banner ── */
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--navy) 0%, #1a3f8f 100%);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 36px 40px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .welcome-banner::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(215,169,40,.15);
+    }
+    .welcome-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: 80px;
+      width: 150px; height: 150px;
+      border-radius: 50%;
+      background: rgba(11,122,138,.2);
+    }
+    .welcome-banner .tag {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold2);
+      margin-bottom: 10px;
+    }
+    .welcome-banner h1 {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .welcome-banner p {
+      font-size: 15px;
+      opacity: .75;
+    }
+    .course-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(215,169,40,.2);
+      color: var(--gold2);
+      border: 1px solid rgba(215,169,40,.4);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 16px;
+    }
+
+    /* ── Grid ── */
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(11,36,82,.06);
+    }
+    .card h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card h2 .icon {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .icon-gold  { background: #fef9ec; }
+    .icon-teal  { background: #ecfcfd; }
+    .icon-blue  { background: #eef3ff; }
+    .icon-green { background: #ecfdf5; }
+
+    /* ── Class List ── */
+    .class-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .class-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: #f8faff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .class-item:hover { box-shadow: 0 4px 16px rgba(11,36,82,.1); border-color: #b5c9f7; }
+    .class-badge {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--navy), #1a3f8f);
+      color: #fff;
+      font-weight: 900;
+      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .class-info { flex: 1; }
+    .class-info strong { font-size: 14px; font-weight: 700; color: #1e2d4e; display: block; }
+    .class-info span { font-size: 12px; color: var(--muted); }
+    .btn-class {
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-class:hover { background: #0a6878; }
+    .btn-class.disabled {
+      background: #e5e9f0;
+      color: var(--muted);
+      cursor: default;
+    }
+
+    /* ── Info Block ── */
+    .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .info-row:last-child { border: none; }
+    .info-row .label { color: var(--muted); font-weight: 500; }
+    .info-row .value { font-weight: 700; color: #1e2d4e; }
+    .badge-active { background: #d1fae5; color: #065f46; border-radius: 100px; padding: 2px 12px; font-size: 12px; font-weight: 700; }
+
+    /* ── Whatsapp CTA ── */
+    .whatsapp-cta {
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .whatsapp-cta p { font-size: 15px; font-weight: 600; opacity: .95; }
+    .whatsapp-cta a {
+      background: #fff;
+      color: #128c7e;
+      border-radius: 10px;
+      padding: 10px 22px;
+      font-weight: 800;
+      font-size: 14px;
+      text-decoration: none;
+      transition: transform .15s;
+      white-space: nowrap;
+    }
+    .whatsapp-cta a:hover { transform: scale(1.03); }
+  </style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 64 64">
+      <path d="M32 3l23 9v19c0 15-10 24-23 30C19 55 9 46 9 31V12z" fill="#0b2452" stroke="#fff" stroke-width="3"/>
+      <path d="M22 41c8-1 19-7 20-17-5 4-12 3-15-2 8 0 14-5 15-13-14 3-22 15-22 32z" fill="#fff"/>
+      <path d="M29 22c6 3 10 8 11 17 4-7 6-17 2-25-1 7-5 11-13 8z" fill="#d7a928" opacity=".85"/>
+    </svg>
+    ASLYON_<span>va</span> SOLUCIONES
+  </div>
+  <div class="user-info">
+    <div class="avatar">{{ student.name[0].upper() }}</div>
+    <span>{{ student.name }}</span>
+    <a class="btn-logout" href="/estudiante/logout">Cerrar sesión</a>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <div class="tag">🎓 Área de Estudiantes</div>
+    <h1>Bienvenido/a, {{ student.name.split()[0] }}</h1>
+    <p>Aquí encontrarás tus clases, grabaciones y recursos académicos personalizados.</p>
+    {% if student.course %}
+    <div class="course-chip">📚 {{ student.course }}</div>
+    {% endif %}
+  </div>
+
+  <!-- Grid -->
+  <div class="grid">
+
+    <!-- Mis Clases -->
+    <div class="card">
+      <h2><span class="icon icon-gold">🎓</span> Mis Clases</h2>
+      <ul class="class-list">
+        <li class="class-item">
+          <div class="class-badge">F1</div>
+          <div class="class-info">
+            <strong>Física I — Mecánica</strong>
+            <span>Próxima sesión: por confirmar</span>
+          </div>
+          <span class="btn-class disabled">Sin enlace</span>
+        </li>
+        <li class="class-item">
+          <div class="class-badge">F2</div>
+          <div class="class-info">
+            <strong>Física II — Electromagnetismo</strong>
+            <span>Próxima sesión: por confirmar</span>
+          </div>
+          <span class="btn-class disabled">Sin enlace</span>
+        </li>
+        <li class="class-item">
+          <div class="class-badge">TD</div>
+          <div class="class-info">
+            <strong>Termodinámica</strong>
+            <span>Próxima sesión: por confirmar</span>
+          </div>
+          <span class="btn-class disabled">Sin enlace</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Grabaciones -->
+    <div class="card">
+      <h2><span class="icon icon-teal">🎥</span> Grabaciones</h2>
+      <ul class="class-list">
+        <li class="class-item">
+          <div class="class-badge" style="background:linear-gradient(135deg,#0b7a8a,#0a6878)">📹</div>
+          <div class="class-info">
+            <strong>No hay grabaciones disponibles</strong>
+            <span>Las grabaciones aparecerán aquí tras cada clase</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Mi cuenta -->
+    <div class="card">
+      <h2><span class="icon icon-blue">👤</span> Mi Cuenta</h2>
+      <div class="info-row">
+        <span class="label">Nombre completo</span>
+        <span class="value">{{ student.name }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Correo electrónico</span>
+        <span class="value">{{ student.email }}</span>
+      </div>
+      {% if student.course %}
+      <div class="info-row">
+        <span class="label">Curso asignado</span>
+        <span class="value">{{ student.course }}</span>
+      </div>
+      {% endif %}
+      <div class="info-row">
+        <span class="label">Alta en la plataforma</span>
+        <span class="value">{{ student.created_at.strftime('%d/%m/%Y') }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Estado de la cuenta</span>
+        <span class="value"><span class="badge-active">✅ Activa</span></span>
+      </div>
+    </div>
+
+    <!-- Soporte -->
+    <div class="card">
+      <h2><span class="icon icon-green">🎧</span> Soporte Académico</h2>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;">
+        ¿Tienes dudas sobre una clase, necesitas reprogramar o quieres consultar algo con tu tutor? 
+        Escríbenos por WhatsApp y te responderemos lo antes posible.
+      </p>
+      <a href="https://wa.me/34641123456?text=Hola,%20soy%20{{ student.name | urlencode }}%20y%20necesito%20ayuda%20con..." 
+         target="_blank" class="btn-class" style="display:inline-block;padding:10px 20px;font-size:14px;">
+        💬 Contactar tutor
+      </a>
+    </div>
+  </div>
+
+  <!-- WhatsApp CTA -->
+  <div class="whatsapp-cta">
+    <p>📲 ¿Necesitas activar una clase o tienes una urgencia académica?</p>
+    <a href="https://wa.me/34641123456" target="_blank">Escribir por WhatsApp</a>
+  </div>
+
+</div>
+</body>
+</html>

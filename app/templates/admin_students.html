@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestión de Estudiantes | Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0b2452; --gold: #d7a928; --teal: #0b7a8a;
+      --bg: #f4f6fb; --card: #fff; --border: #e5e9f0; --muted: #6b7280;
+      --radius: 14px;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: #1e2d4e; min-height: 100vh; }
+
+    /* Top */
+    .topbar {
+      background: var(--navy); color: #fff;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 60px;
+      box-shadow: 0 2px 12px rgba(11,36,82,.2);
+    }
+    .topbar .brand { font-weight: 800; font-size: 17px; }
+    .topbar .brand span { color: var(--gold); }
+    .topbar nav { display: flex; gap: 8px; }
+    .topbar nav a {
+      color: rgba(255,255,255,.7); text-decoration: none;
+      padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      transition: background .2s, color .2s;
+    }
+    .topbar nav a:hover, .topbar nav a.active { background: rgba(255,255,255,.12); color: #fff; }
+    .btn-logout {
+      background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.2);
+      border-radius: 8px; padding: 6px 14px; font-size: 13px; font-weight: 600;
+      cursor: pointer; text-decoration: none; transition: background .2s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,.2); }
+
+    /* Layout */
+    .layout { max-width: 1100px; margin: 0 auto; padding: 36px 24px; }
+
+    /* Page Header */
+    .page-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 28px; flex-wrap: wrap; gap: 16px;
+    }
+    .page-header h1 { font-size: 24px; font-weight: 900; }
+    .page-header h1 small { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-top: 2px; }
+    .btn-primary {
+      background: var(--navy); color: #fff; border: none;
+      border-radius: 10px; padding: 10px 22px; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-primary:hover { background: #102d62; }
+
+    /* Card */
+    .card {
+      background: var(--card); border-radius: var(--radius);
+      border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(11,36,82,.06);
+    }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead th {
+      text-align: left; padding: 14px 18px; font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--muted); border-bottom: 1px solid var(--border);
+      background: #f8faff;
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:last-child { border: none; }
+    tbody tr:hover { background: #f8faff; }
+    td { padding: 14px 18px; vertical-align: middle; }
+    .avatar-cell {
+      width: 38px; height: 38px;
+      border-radius: 50%; background: var(--navy);
+      color: #fff; font-weight: 800; font-size: 15px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .badge { border-radius: 100px; padding: 3px 12px; font-size: 12px; font-weight: 700; }
+    .badge-active { background: #d1fae5; color: #065f46; }
+    .badge-inactive { background: #fee2e2; color: #991b1b; }
+    .actions { display: flex; gap: 8px; align-items: center; }
+    .btn-sm {
+      border: none; border-radius: 8px; padding: 6px 12px;
+      font-size: 12px; font-weight: 700; cursor: pointer; transition: opacity .2s;
+    }
+    .btn-sm:hover { opacity: .8; }
+    .btn-toggle-on  { background: #fee2e2; color: #991b1b; }
+    .btn-toggle-off { background: #d1fae5; color: #065f46; }
+    .btn-delete { background: #f3f4f6; color: #374151; }
+
+    /* Empty State */
+    .empty {
+      text-align: center; padding: 60px 24px; color: var(--muted);
+    }
+    .empty .emoji { font-size: 48px; margin-bottom: 12px; display: block; }
+    .empty p { font-size: 15px; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(11,36,82,.5);
+      display: none; align-items: center; justify-content: center;
+      z-index: 200; backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff; border-radius: 20px; padding: 36px;
+      width: 100%; max-width: 460px; position: relative;
+      box-shadow: 0 24px 64px rgba(11,36,82,.2);
+      animation: slideUp .25s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal h2 { font-size: 20px; font-weight: 900; color: var(--navy); margin-bottom: 6px; }
+    .modal p.sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: #f3f4f6; border: none; border-radius: 50%;
+      width: 32px; height: 32px; font-size: 18px; cursor: pointer; color: var(--muted);
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 6px; }
+    .form-group input {
+      width: 100%; padding: 11px 14px; border: 1.5px solid var(--border);
+      border-radius: 10px; font-size: 14px; font-family: inherit;
+      outline: none; transition: border-color .2s;
+    }
+    .form-group input:focus { border-color: var(--navy); }
+    #modal-error {
+      background: #fee2e2; color: #991b1b; border-radius: 10px;
+      padding: 10px 14px; font-size: 13px; font-weight: 600;
+      margin-bottom: 16px; display: none;
+    }
+    #modal-success {
+      background: #d1fae5; color: #065f46; border-radius: 10px;
+      padding: 10px 14px; font-size: 13px; font-weight: 600;
+      margin-bottom: 16px; display: none;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 30px; right: 30px;
+      background: var(--navy); color: #fff;
+      border-radius: 12px; padding: 14px 22px;
+      font-size: 14px; font-weight: 600;
+      box-shadow: 0 8px 24px rgba(11,36,82,.3);
+      z-index: 999; transform: translateY(80px); opacity: 0;
+      transition: all .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<header class="topbar">
+  <div class="brand">ASLYON_<span>va</span> ADMIN</div>
+  <nav>
+    <a href="/admin/mensajes">📩 Mensajes</a>
+    <a href="/admin/estudiantes" class="active">🎓 Estudiantes</a>
+  </nav>
+  <a class="btn-logout" href="/admin/logout">Salir</a>
+</header>
+
+<div class="layout">
+  <div class="page-header">
+    <h1>
+      Gestión de Estudiantes
+      <small>Crea, activa y gestiona cuentas de acceso al área de estudiantes</small>
+    </h1>
+    <button class="btn-primary" onclick="openModal()">+ Nuevo Estudiante</button>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      {% if estudiantes %}
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Curso</th>
+            <th>Alta</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="students-tbody">
+          {% for s in estudiantes %}
+          <tr id="row-{{ s.id }}">
+            <td><div class="avatar-cell">{{ s.name[0].upper() }}</div></td>
+            <td><strong>{{ s.name }}</strong></td>
+            <td>{{ s.email }}</td>
+            <td>{{ s.course or '—' }}</td>
+            <td>{{ s.created_at.strftime('%d/%m/%Y') }}</td>
+            <td>
+              {% if s.is_active %}
+              <span class="badge badge-active" id="badge-{{ s.id }}">✅ Activa</span>
+              {% else %}
+              <span class="badge badge-inactive" id="badge-{{ s.id }}">🔴 Inactiva</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="actions">
+                <button class="btn-sm {% if s.is_active %}btn-toggle-on{% else %}btn-toggle-off{% endif %}"
+                        id="toggle-btn-{{ s.id }}"
+                        onclick="toggleStudent({{ s.id }}, {{ 'true' if s.is_active else 'false' }})">
+                  {% if s.is_active %}Desactivar{% else %}Activar{% endif %}
+                </button>
+                <button class="btn-sm btn-delete" onclick="deleteStudent({{ s.id }}, '{{ s.name }}')">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty">
+        <span class="emoji">🎓</span>
+        <p>Aún no hay estudiantes registrados.<br>Pulsa <strong>"+ Nuevo Estudiante"</strong> para crear el primero.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nuevo Estudiante -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2>Nuevo Estudiante</h2>
+    <p class="sub">Las credenciales serán enviadas al estudiante por WhatsApp o correo.</p>
+    <div id="modal-error"></div>
+    <div id="modal-success"></div>
+    <form id="student-form" onsubmit="submitNewStudent(event)">
+      <div class="form-group">
+        <label for="s-name">Nombre completo *</label>
+        <input type="text" id="s-name" placeholder="Ej: María López" required>
+      </div>
+      <div class="form-group">
+        <label for="s-email">Correo electrónico *</label>
+        <input type="email" id="s-email" placeholder="estudiante@correo.com" required>
+      </div>
+      <div class="form-group">
+        <label for="s-password">Contraseña de acceso *</label>
+        <input type="text" id="s-password" placeholder="Mínimo 6 caracteres" required minlength="6">
+      </div>
+      <div class="form-group">
+        <label for="s-course">Curso / Programa</label>
+        <input type="text" id="s-course" placeholder="Ej: Física I — Ingeniería Industrial">
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%;margin-top:8px;padding:13px;" id="submit-btn">
+        Crear Estudiante
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  function openModal() {
+    document.getElementById('modal').classList.add('open');
+    document.getElementById('modal-error').style.display = 'none';
+    document.getElementById('modal-success').style.display = 'none';
+    document.getElementById('student-form').reset();
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  function showToast(msg, success=true) {
+    const t = document.getElementById('toast');
+    t.textContent = (success ? '✅ ' : '❌ ') + msg;
+    t.style.background = success ? '#065f46' : '#991b1b';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  async function submitNewStudent(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Creando...';
+
+    const err = document.getElementById('modal-error');
+    const ok  = document.getElementById('modal-success');
+    err.style.display = 'none';
+    ok.style.display  = 'none';
+
+    const payload = {
+      name:     document.getElementById('s-name').value,
+      email:    document.getElementById('s-email').value,
+      password: document.getElementById('s-password').value,
+      course:   document.getElementById('s-course').value,
+    };
+
+    try {
+      const res  = await fetch('/admin/estudiantes/nuevo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        ok.textContent = data.message;
+        ok.style.display = 'block';
+        document.getElementById('student-form').reset();
+        setTimeout(() => { closeModal(); location.reload(); }, 1200);
+      } else {
+        err.textContent = data.message;
+        err.style.display = 'block';
+      }
+    } catch(ex) {
+      err.textContent = 'Error de conexión. Inténtalo de nuevo.';
+      err.style.display = 'block';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Crear Estudiante';
+  }
+
+  async function toggleStudent(id, isCurrentlyActive) {
+    const res  = await fetch(`/admin/estudiantes/${id}/toggle`, { method: 'POST' });
+    const data = await res.json();
+    if (data.success) {
+      const badge  = document.getElementById(`badge-${id}`);
+      const btn    = document.getElementById(`toggle-btn-${id}`);
+      if (data.is_active) {
+        badge.className = 'badge badge-active';
+        badge.textContent = '✅ Activa';
+        btn.className = 'btn-sm btn-toggle-on';
+        btn.textContent = 'Desactivar';
+      } else {
+        badge.className = 'badge badge-inactive';
+        badge.textContent = '🔴 Inactiva';
+        btn.className = 'btn-sm btn-toggle-off';
+        btn.textContent = 'Activar';
+      }
+      showToast(data.message);
+    } else {
+      showToast(data.message, false);
+    }
+  }
+
+  async function deleteStudent(id, name) {
+    if (!confirm(`¿Eliminar permanentemente la cuenta de ${name}? Esta acción no se puede deshacer.`)) return;
+    const res  = await fetch(`/admin/estudiantes/${id}/eliminar`, { method: 'POST' });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById(`row-${id}`)?.remove();
+      showToast(data.message);
+    } else {
+      showToast(data.message, false);
+    }
+  }
+</script>
+</body>
+</html>
