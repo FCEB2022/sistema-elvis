@@ -17,12 +17,20 @@ def index():
 def health():
     """Diagnostic endpoint to check app and database status."""
     from app import db
+    from app.models import ContactMessage, Student
     try:
         db.session.execute(db.text("SELECT 1"))
         db_status = "OK"
+        try:
+            ContactMessage.query.limit(1).all()
+            Student.query.limit(1).all()
+            tables_status = "OK"
+        except Exception as te:
+            tables_status = f"ERROR ({str(te)})"
     except Exception as e:
-        db_status = f"ERROR: {str(e)}"
-    return f"<h2>Estado del sistema</h2><p>App: OK</p><p>Base de datos: {db_status}</p>", 200
+        db_status = f"ERROR ({str(e)})"
+        tables_status = "ERROR (DB offline)"
+    return f"<h2>Estado del sistema</h2><p>App: OK</p><p>Base de datos: {db_status}</p><p>Tablas: {tables_status}</p>", 200
 
 
 # ─────────────────────────────────────────────────────────────────────────────

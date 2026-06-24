@@ -13,6 +13,8 @@ def create_app(config_class=Config):
 
     with app.app_context():
         try:
+            # Import models to register them with metadata
+            from app import models
             # Ensure PostgreSQL schema exists if using Postgres
             if db.engine.url.drivername.startswith('postgres'):
                 db.session.execute(db.text("CREATE SCHEMA IF NOT EXISTS elvis;"))
