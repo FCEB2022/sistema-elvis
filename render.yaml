@@ -8,10 +8,5 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
-        fromDatabase:
-          name: elvis-db
-          property: connectionString
+        value: postgresql://equahome:UotA3zOqWWmzZJzK6bLWD7ksV4Bg2RmK@dpg-d8ooagurnols73db7btg-a/equahome?options=-csearch_path%3Delvis
 
-databases:
-  - name: elvis-db
-    plan: free
