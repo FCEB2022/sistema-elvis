@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, session
 from app import db
-from app.models import ContactMessage, Student
+from app.models import ContactMessage, Student, EnrollmentRequest
+from app.utils_mail import send_enrollment_approved_email, send_enrollment_rejected_email
 
 main = Blueprint('main', __name__)
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PÁGINA PRINCIPAL
@@ -180,7 +182,117 @@ def admin_estudiantes():
     if not session.get('admin_logged_in'):
         return redirect(url_for('main.admin_login'))
     estudiantes = Student.query.order_by(Student.created_at.desc()).all()
-    return render_template('admin_students.html', estudiantes=estudiantes)
+    solicitudes = EnrollmentRequest.query.filter_by(status='pending').order_by(EnrollmentRequest.created_at.desc()).all()
+    return render_template('admin_students.html', estudiantes=estudiantes, solicitudes=solicitudes)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# API INSCRIPCIÓN ESTUDIANTIL
+# ─────────────────────────────────────────────────────────────────────────────
+
+@main.route('/api/inscripcion/nueva', methods=['POST'])
+def api_inscripcion_nueva():
+    try:
+        data = request.get_json() or {}
+        name = data.get('name', '').strip()
+        email = data.get('email', '').strip().lower()
+        password = data.get('password', '').strip()
+        service = data.get('service', '').strip()
+        whatsapp = data.get('whatsapp', '').strip()
+
+        if not name or not email or not password or not service:
+            return jsonify({'success': False, 'message': 'Por favor, rellena todos los campos requeridos.'}), 400
+
+        # Check if email is already in use by active student
+        if Student.query.filter_by(email=email).first():
+            return jsonify({'success': False, 'message': 'Ya existe una cuenta activa registrada con este correo.'}), 409
+
+        # Check if there is already a pending enrollment request with this email
+        existing_req = EnrollmentRequest.query.filter_by(email=email, status='pending').first()
+        if existing_req:
+            return jsonify({'success': False, 'message': 'Ya tienes una solicitud de inscripción pendiente de aprobación.'}), 409
+
+        req = EnrollmentRequest(
+            name=name,
+            email=email,
+            service=service,
+            whatsapp=whatsapp
+        )
+        req.set_password(password)
+        
+        db.session.add(req)
+        db.session.commit()
+
+        return jsonify({
+            'success': True,
+            'message': '¡Tu solicitud de inscripción ha sido enviada con éxito! Recibirás un correo cuando el administrador la valide.'
+        })
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': f'Error al procesar la inscripción: {str(e)}'}), 500
+
+
+@main.route('/admin/inscripciones/<int:id>/aprobar', methods=['POST'])
+def admin_aprobar_inscripcion(id):
+    if not session.get('admin_logged_in'):
+        return jsonify({'success': False, 'message': 'No autorizado.'}), 403
+
+    req = EnrollmentRequest.query.get_or_404(id)
+    if req.status != 'pending':
+        return jsonify({'success': False, 'message': 'Esta solicitud ya ha sido procesada.'}), 400
+
+    try:
+        # Check if student already exists
+        if Student.query.filter_by(email=req.email).first():
+            req.status = 'approved'
+            db.session.commit()
+            return jsonify({'success': False, 'message': 'El estudiante ya existe con esta dirección de correo.'}), 409
+
+        # Create active Student
+        student = Student(
+            name=req.name,
+            email=req.email,
+            course=req.service,
+            is_active=True
+        )
+        student.password_hash = req.password_hash  # Use same hashed password
+        
+        # Mark enrollment request as approved
+        req.status = 'approved'
+        
+        db.session.add(student)
+        db.session.commit()
+        
+        # Send Email Notification
+        send_enrollment_approved_email(req.email, req.name, req.service)
+
+        return jsonify({'success': True, 'message': f'Inscripción de {req.name} aprobada y estudiante creado.'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+
+@main.route('/admin/inscripciones/<int:id>/rechazar', methods=['POST'])
+def admin_rechazar_inscripcion(id):
+    if not session.get('admin_logged_in'):
+        return jsonify({'success': False, 'message': 'No autorizado.'}), 403
+
+    req = EnrollmentRequest.query.get_or_404(id)
+    if req.status != 'pending':
+        return jsonify({'success': False, 'message': 'Esta solicitud ya ha sido procesada.'}), 400
+
+    try:
+        req.status = 'rejected'
+        db.session.commit()
+        
+        # Send Email Notification
+        send_enrollment_rejected_email(req.email, req.name, req.service)
+
+        return jsonify({'success': True, 'message': f'Solicitud de {req.name} rechazada correctamente.'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+
 
 
 @main.route('/admin/estudiantes/nuevo', methods=['POST'])

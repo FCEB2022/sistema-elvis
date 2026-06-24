@@ -331,6 +331,98 @@
       </ul>
     </div>
 
+    <!-- Materiales de Apoyo -->
+    <div class="card">
+      <h2><span class="icon icon-blue">📚</span> Materiales de Apoyo ({{ student.course or 'General' }})</h2>
+      <ul class="class-list">
+        {% if student.course == 'Academia Victoria' %}
+        <li class="class-item">
+          <div class="class-badge" style="background:var(--navy);">📕</div>
+          <div class="class-info">
+            <strong>Guía de Física I — Cinemática y Dinámica</strong>
+            <span>PDF · 2.4 MB</span>
+          </div>
+          <a class="btn-class" href="#" onclick="alert('Descargando Guía de Física I...')">Descargar</a>
+        </li>
+        <li class="class-item">
+          <div class="class-badge" style="background:var(--navy);">📘</div>
+          <div class="class-info">
+            <strong>Formulario de Física II — Electromagnetismo</strong>
+            <span>PDF · 1.1 MB</span>
+          </div>
+          <a class="btn-class" href="#" onclick="alert('Descargando Formulario de Física II...')">Descargar</a>
+        </li>
+        <li class="class-item">
+          <div class="class-badge" style="background:var(--navy);">📙</div>
+          <div class="class-info">
+            <strong>Ejercicios Resueltos de Termodinámica</strong>
+            <span>PDF · 4.8 MB</span>
+          </div>
+          <a class="btn-class" href="#" onclick="alert('Descargando Ejercicios Resueltos...')">Descargar</a>
+        </li>
+        {% elif student.course == 'Mentoría' %}
+        <li class="class-item">
+          <div class="class-badge" style="background:var(--teal);">📔</div>
+          <div class="class-info">
+            <strong>Guía de Adaptación y Trámites en España</strong>
+            <span>PDF · 3.2 MB</span>
+          </div>
+          <a class="btn-class" href="#" onclick="alert('Descargando Guía de Adaptación...')">Descargar</a>
+        </li>
+        <li class="class-item">
+          <div class="class-badge" style="background:var(--teal);">📅</div>
+          <div class="class-info">
+            <strong>Calendario de Planificación Académica</strong>
+            <span>Enlace Interactivo</span>
+          </div>
+          <a class="btn-class" href="#" onclick="alert('Abriendo Calendario...')">Abrir</a>
+        </li>
+        <li class="class-item">
+          <div class="class-badge" style="background:var(--teal);">📝</div>
+          <div class="class-info">
+            <strong>Plantilla de Currículum para Prácticas</strong>
+            <span>Word · 450 KB</span>
+          </div>
+          <a class="btn-class" href="#" onclick="alert('Descargando Plantilla CV...')">Descargar</a>
+        </li>
+        {% elif student.course == 'E_hackers' %}
+        <li class="class-item">
+          <div class="class-badge" style="background:#5a2794; display: flex; align-items: center; justify-content: center; font-size: 16px;">🤖</div>
+          <div class="class-info">
+            <strong>Manual de Introducción a la IA</strong>
+            <span>PDF · 5.2 MB</span>
+          </div>
+          <a class="btn-class" href="#" onclick="alert('Descargando Manual IA...')">Descargar</a>
+        </li>
+        <li class="class-item">
+          <div class="class-badge" style="background:#5a2794; display: flex; align-items: center; justify-content: center; font-size: 16px;">💡</div>
+          <div class="class-info">
+            <strong>Guía de Prompts para Estudiantes</strong>
+            <span>PDF · 1.5 MB</span>
+          </div>
+          <a class="btn-class" href="#" onclick="alert('Descargando Guía de Prompts...')">Descargar</a>
+        </li>
+        <li class="class-item">
+          <div class="class-badge" style="background:#5a2794; display: flex; align-items: center; justify-content: center; font-size: 16px;">💻</div>
+          <div class="class-info">
+            <strong>Tutorial de Agentes con Python</strong>
+            <span>Enlace a Repositorio</span>
+          </div>
+          <a class="btn-class" href="#" onclick="alert('Abriendo repositorio...')">Ver</a>
+        </li>
+        {% else %}
+        <li class="class-item">
+          <div class="class-badge" style="background:var(--muted); display: flex; align-items: center; justify-content: center; font-size: 16px;">📁</div>
+          <div class="class-info">
+            <strong>No hay materiales específicos</strong>
+            <span>Contacta con secretaría para más información</span>
+          </div>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+
+
     <!-- Mi cuenta -->
     <div class="card">
       <h2><span class="icon icon-blue">👤</span> Mi Cuenta</h2>

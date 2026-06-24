@@ -134,3 +134,78 @@ async function handleStudentLogin(e) {
     btn.textContent = 'Iniciar Sesión';
   }
 }
+
+// ── Toggle Student Modal View (Login / Register) ──────────────────────────────
+function toggleStudentModalView(view) {
+  const loginView = document.getElementById('login-view');
+  const registerView = document.getElementById('register-view');
+  
+  if (view === 'register') {
+    loginView.style.display = 'none';
+    registerView.style.display = 'block';
+  } else {
+    loginView.style.display = 'block';
+    registerView.style.display = 'none';
+  }
+}
+
+// ── Handle Student Registration ───────────────────────────────────────────────
+async function handleStudentRegister(e) {
+  e.preventDefault();
+  const alertDiv = document.getElementById('student-register-alert');
+  const btn = document.getElementById('student-register-btn');
+  
+  alertDiv.style.display = 'none';
+  alertDiv.className = '';
+  btn.disabled = true;
+  btn.textContent = 'Procesando solicitud...';
+
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value.trim();
+  const whatsapp = document.getElementById('reg-whatsapp').value.trim();
+  const service = document.getElementById('reg-service').value;
+
+  try {
+    const res = await fetch('/api/inscripcion/nueva', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password, whatsapp, service })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      alertDiv.style.background = '#e6f6f6';
+      alertDiv.style.color = '#0b7a8a';
+      alertDiv.style.border = '1px solid #0b7a8a';
+      alertDiv.textContent = data.message;
+      alertDiv.style.display = 'block';
+      document.getElementById('studentRegisterForm').reset();
+      
+      // Auto switch back to login after 3 seconds
+      setTimeout(() => {
+        toggleStudentModalView('login');
+        alertDiv.style.display = 'none';
+        btn.disabled = false;
+        btn.textContent = 'Solicitar Matrícula';
+      }, 4000);
+    } else {
+      alertDiv.style.background = '#fee2e2';
+      alertDiv.style.color = '#991b1b';
+      alertDiv.style.border = '1px solid #ef4444';
+      alertDiv.textContent = data.message;
+      alertDiv.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Solicitar Matrícula';
+    }
+  } catch (err) {
+    alertDiv.style.background = '#fee2e2';
+    alertDiv.style.color = '#991b1b';
+    alertDiv.style.border = '1px solid #ef4444';
+    alertDiv.textContent = 'Error de conexión. Inténtalo de nuevo.';
+    alertDiv.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Solicitar Matrícula';
+  }
+}
+

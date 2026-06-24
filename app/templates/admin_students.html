@@ -151,6 +151,18 @@
       transition: all .35s cubic-bezier(.34,1.56,.64,1);
     }
     .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* Tabs styling */
+    .tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 2px solid var(--border); }
+    .tab-btn {
+      background: none; border: none; padding: 12px 20px; font-size: 14px; font-weight: 700;
+      color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s;
+    }
+    .tab-btn.active { color: var(--navy); border-bottom-color: var(--gold); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .btn-approve { background: #d1fae5; color: #065f46; }
+    .btn-reject { background: #fee2e2; color: #991b1b; }
   </style>
 </head>
 <body>
@@ -177,56 +189,119 @@
     <button class="btn-primary" onclick="openModal()">+ Nuevo Estudiante</button>
   </div>
 
-  <div class="card">
-    <div class="table-wrap">
-      {% if estudiantes %}
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Curso</th>
-            <th>Alta</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="students-tbody">
-          {% for s in estudiantes %}
-          <tr id="row-{{ s.id }}">
-            <td><div class="avatar-cell">{{ s.name[0].upper() }}</div></td>
-            <td><strong>{{ s.name }}</strong></td>
-            <td>{{ s.email }}</td>
-            <td>{{ s.course or '—' }}</td>
-            <td>{{ s.created_at.strftime('%d/%m/%Y') }}</td>
-            <td>
-              {% if s.is_active %}
-              <span class="badge badge-active" id="badge-{{ s.id }}">✅ Activa</span>
-              {% else %}
-              <span class="badge badge-inactive" id="badge-{{ s.id }}">🔴 Inactiva</span>
-              {% endif %}
-            </td>
-            <td>
-              <div class="actions">
-                <button class="btn-sm {% if s.is_active %}btn-toggle-on{% else %}btn-toggle-off{% endif %}"
-                        id="toggle-btn-{{ s.id }}"
-                        onclick="toggleStudent({{ s.id }}, {{ 'true' if s.is_active else 'false' }})">
-                  {% if s.is_active %}Desactivar{% else %}Activar{% endif %}
-                </button>
-                <button class="btn-sm btn-delete" onclick="deleteStudent({{ s.id }}, '{{ s.name }}')">Eliminar</button>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <div class="empty">
-        <span class="emoji">🎓</span>
-        <p>Aún no hay estudiantes registrados.<br>Pulsa <strong>"+ Nuevo Estudiante"</strong> para crear el primero.</p>
+  <!-- Tabs Navigation -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-active-btn" onclick="switchTab('active-students')">🎓 Estudiantes Activos ({{ estudiantes|length }})</button>
+    <button class="tab-btn" id="tab-pending-btn" onclick="switchTab('pending-enrollments')">📩 Solicitudes Pendientes ({{ solicitudes|length }})</button>
+  </div>
+
+  <!-- Tab Content: Active Students -->
+  <div id="active-students" class="tab-content active">
+    <div class="card">
+      <div class="table-wrap">
+        {% if estudiantes %}
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Curso / Servicio</th>
+              <th>Alta</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="students-tbody">
+            {% for s in estudiantes %}
+            <tr id="row-{{ s.id }}">
+              <td><div class="avatar-cell">{{ s.name[0].upper() }}</div></td>
+              <td><strong>{{ s.name }}</strong></td>
+              <td>{{ s.email }}</td>
+              <td>{{ s.course or '—' }}</td>
+              <td>{{ s.created_at.strftime('%d/%m/%Y') }}</td>
+              <td>
+                {% if s.is_active %}
+                <span class="badge badge-active" id="badge-{{ s.id }}">✅ Activa</span>
+                {% else %}
+                <span class="badge badge-inactive" id="badge-{{ s.id }}">🔴 Inactiva</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="btn-sm {% if s.is_active %}btn-toggle-on{% else %}btn-toggle-off{% endif %}"
+                          id="toggle-btn-{{ s.id }}"
+                          onclick="toggleStudent({{ s.id }}, {{ 'true' if s.is_active else 'false' }})">
+                    {% if s.is_active %}Desactivar{% else %}Activar{% endif %}
+                  </button>
+                  <button class="btn-sm btn-delete" onclick="deleteStudent({{ s.id }}, '{{ s.name }}')">Eliminar</button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty">
+          <span class="emoji">🎓</span>
+          <p>Aún no hay estudiantes registrados.<br>Pulsa <strong>"+ Nuevo Estudiante"</strong> para crear el primero o aprueba una inscripción.</p>
+        </div>
+        {% endif %}
       </div>
-      {% endif %}
+    </div>
+  </div>
+
+  <!-- Tab Content: Pending Enrollments -->
+  <div id="pending-enrollments" class="tab-content">
+    <div class="card">
+      <div class="table-wrap">
+        {% if solicitudes %}
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Servicio Solicitado</th>
+              <th>WhatsApp / Teléfono</th>
+              <th>Fecha de Solicitud</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for req in solicitudes %}
+            <tr id="req-row-{{ req.id }}">
+              <td><div class="avatar-cell" style="background:var(--teal)">{{ req.name[0].upper() }}</div></td>
+              <td><strong>{{ req.name }}</strong></td>
+              <td>{{ req.email }}</td>
+              <td><span class="badge badge-active" style="background:#eef2ff; color:#1e40af;">{{ req.service }}</span></td>
+              <td>
+                {% if req.whatsapp %}
+                <a href="https://wa.me/{{ req.whatsapp|replace('+', '')|replace(' ', '') }}" target="_blank" style="color: #0d9488; font-weight: 700; text-decoration: none;">
+                  💬 {{ req.whatsapp }}
+                </a>
+                {% else %}
+                —
+                {% endif %}
+              </td>
+              <td>{{ req.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+              <td>
+                <div class="actions">
+                  <button class="btn-sm btn-approve" onclick="approveEnrollment({{ req.id }}, '{{ req.name }}')">Aprobar</button>
+                  <button class="btn-sm btn-reject" onclick="rejectEnrollment({{ req.id }}, '{{ req.name }}')">Rechazar</button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty">
+          <span class="emoji">📩</span>
+          <p>No hay solicitudes de inscripción pendientes en este momento.</p>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>
@@ -267,6 +342,23 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  function switchTab(tabId) {
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    // Deactivate all tab buttons
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    // Show selected tab content
+    document.getElementById(tabId).classList.add('active');
+    
+    // Activate clicked button
+    if (tabId === 'active-students') {
+      document.getElementById('tab-active-btn').classList.add('active');
+    } else {
+      document.getElementById('tab-pending-btn').classList.add('active');
+    }
+  }
+
   function openModal() {
     document.getElementById('modal').classList.add('open');
     document.getElementById('modal-error').style.display = 'none';
@@ -361,6 +453,40 @@
       showToast(data.message);
     } else {
       showToast(data.message, false);
+    }
+  }
+
+  async function approveEnrollment(id, name) {
+    if (!confirm(`¿Aprobar la solicitud de inscripción de ${name}? Se creará la cuenta de estudiante y se enviará la notificación.`)) return;
+    try {
+      const res = await fetch(`/admin/inscripciones/${id}/aprobar`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message);
+        document.getElementById(`req-row-${id}`)?.remove();
+        setTimeout(() => location.reload(), 1500);
+      } else {
+        showToast(data.message, false);
+      }
+    } catch (e) {
+      showToast('Error de red al aprobar la inscripción.', false);
+    }
+  }
+
+  async function rejectEnrollment(id, name) {
+    if (!confirm(`¿Rechazar la solicitud de inscripción de ${name}? Esta acción enviará una notificación por correo.`)) return;
+    try {
+      const res = await fetch(`/admin/inscripciones/${id}/rechazar`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message);
+        document.getElementById(`req-row-${id}`)?.remove();
+        setTimeout(() => location.reload(), 1500);
+      } else {
+        showToast(data.message, false);
+      }
+    } catch (e) {
+      showToast('Error de red al rechazar la inscripción.', false);
     }
   }
 </script>

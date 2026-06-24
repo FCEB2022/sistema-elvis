@@ -7,8 +7,11 @@ instance/
 aslyon_va_soluciones_maqueta_navegable_actualizada (1).html
 test_api.py
 test_students.py
+test_enrollment.py
 scratch_*
 render_logs.txt
 render_logs_*.txt
+app/static/emails_sent.log
+
 
 
