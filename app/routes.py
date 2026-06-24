@@ -13,6 +13,18 @@ def index():
     return render_template('index.html')
 
 
+@main.route('/health')
+def health():
+    """Diagnostic endpoint to check app and database status."""
+    from app import db
+    try:
+        db.session.execute(db.text("SELECT 1"))
+        db_status = "OK"
+    except Exception as e:
+        db_status = f"ERROR: {str(e)}"
+    return f"<h2>Estado del sistema</h2><p>App: OK</p><p>Base de datos: {db_status}</p>", 200
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # API CONTACTO
 # ─────────────────────────────────────────────────────────────────────────────
