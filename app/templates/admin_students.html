@@ -22,7 +22,7 @@
       padding: 0 32px; height: 60px;
       box-shadow: 0 2px 12px rgba(11,36,82,.2);
     }
-    .topbar .brand { font-weight: 800; font-size: 17px; }
+    .topbar .brand { font-weight: 800; font-size: 17px; display: flex; align-items: center; gap: 8px; }
     .topbar .brand span { color: var(--gold); }
     .topbar nav { display: flex; gap: 8px; }
     .topbar nav a {
@@ -157,7 +157,10 @@
 
 <!-- Top Bar -->
 <header class="topbar">
-  <div class="brand">ASLYON_<span>va</span> ADMIN</div>
+  <div class="brand">
+    <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo ASLYON_va" style="width: 32px; height: 32px; object-fit: cover; border-radius: 8px;">
+    ASLYON_<span>va</span> ADMIN
+  </div>
   <nav>
     <a href="/admin/mensajes">📩 Mensajes</a>
     <a href="/admin/estudiantes" class="active">🎓 Estudiantes</a>
